@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Renderizado sin useCallback</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+    .card {
+      border: 1px solid gray;
+      padding: 1rem;
+      width: 300px;
+      border-radius: 8px;
+    }
+    button {
+      margin: 0.25rem 0.5rem 0 0;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, memo } = React;
+
+    const ButtonOptimizado = memo(({ onClick, label }) => {
+      return <button onClick={onClick}>{label}</button>;
+    });
+
+    const ButtonNormal = ({ onClick, label }) => {
+      return <button onClick={onClick}>{label}</button>;
+    };
+
+    const CartaDeElementos = () => {
+      const [randomNumber, setRandomNumber] = useState(0);
+      const [counter, setCounter] = useState(0);
+
+      const createRandom = () => {
+        const newRandom = Math.floor(Math.random() * 100);
+        setRandomNumber(newRandom);
+      };
+
+      const addCounter = () => {
+        setCounter(prev => prev + 1);
+      };
+
+      return (
+        <div className="card">
+          <h2>Carta de Elementos</h2>
+          <p><strong>Número Aleatorio:</strong> {randomNumber}</p>
+          <p><strong>Contador:</strong> {counter}</p>
+          <ButtonOptimizado onClick={createRandom} label="Generar Aleatorio" />
+          <ButtonNormal onClick={addCounter} label="Incrementar Contador" />
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<CartaDeElementos />);
+  </script>
+</body>
+</html>
