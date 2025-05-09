@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Renderizado sin useCallback</title>
+  <title>Renderizado de hijos - Limpio</title>
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -28,7 +28,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, memo } = React;
+    const { useState, useCallback, memo } = React;
 
     const ButtonOptimizado = memo(({ onClick, label }) => {
       return <button onClick={onClick}>{label}</button>;
@@ -42,10 +42,10 @@
       const [randomNumber, setRandomNumber] = useState(0);
       const [counter, setCounter] = useState(0);
 
-      const createRandom = () => {
+      const createRandom = useCallback(() => {
         const newRandom = Math.floor(Math.random() * 100);
         setRandomNumber(newRandom);
-      };
+      }, []);
 
       const addCounter = () => {
         setCounter(prev => prev + 1);
